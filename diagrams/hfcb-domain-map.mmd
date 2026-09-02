@@ -1,0 +1,46 @@
+flowchart LR
+  subgraph Identity
+    U[users]
+    R[roles]
+    P[permissions]
+    U --> R --> P
+  end
+  subgraph Catalogue
+    C[property_categories]
+    ST[property_subtypes]
+    PR[properties]
+    PM[property_media]
+    C --> ST --> PR --> PM
+  end
+  subgraph Transactions
+    B[bookings]
+    T[transactions]
+    K[kyc_cases]
+    D[kyc_documents]
+    O[offer_letters]
+    PR --> B
+    U --> B
+    B --> T
+    B --> K --> D
+    B --> O
+  end
+  subgraph Integrations
+    X[integration_exchanges]
+    Q[integration_requests]
+    S[integration_responses]
+    CB[callback_events]
+    X --> Q
+    X --> S
+    X --> CB
+  end
+  subgraph Future_Admin
+    WD[workflow_definitions]
+    WI[workflow_instances]
+    WT[workflow_tasks]
+    AD[approval_decisions]
+    WD --> WI --> WT --> AD
+  end
+  U --> PR
+  X -. business entity .-> B
+  X -. business entity .-> T
+  WT --> U
