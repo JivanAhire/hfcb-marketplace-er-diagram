@@ -1,0 +1,83 @@
+flowchart TD
+  subgraph ACCESS[Admin Identity and RBAC]
+    U[users]
+    R[roles]
+    P[permissions]
+    UR[user_roles]
+    RP[role_permissions]
+    U --> UR --> R
+    R --> RP --> P
+  end
+
+  subgraph CATALOGUE[Project and Property Administration]
+    PJ[projects]
+    PR[properties]
+    PPA[property_pa_assignments]
+    LCC[loan_calculator_configurations]
+    PLCA[property_loan_config_assignments]
+    PJ --> PR
+    PR --> PPA
+    U --> PPA
+    LCC --> PLCA
+    PR --> PLCA
+  end
+
+  subgraph STAFF[PA and Scout Administration]
+    PAA[pa_absences]
+    SA[scout_assignments]
+    PSV[property_scout_verifications]
+    U --> PAA
+    PR --> SA
+    U --> SA
+    SA --> PSV
+  end
+
+  subgraph WORKFLOW[Maker-Checker Workflow]
+    WD[workflow_definitions]
+    WS[workflow_steps]
+    WI[workflow_instances]
+    WT[workflow_tasks]
+    AD[approval_decisions]
+    RC[reason_codes]
+    ESH[entity_status_history]
+    WD --> WS
+    WD --> WI
+    WI --> WT
+    WS --> WT
+    WT --> AD
+    U --> WT
+    R --> WT
+    RC --> AD
+    WI --> ESH
+  end
+
+  subgraph OPERATIONS[Booking and Payment Operations]
+    B[bookings]
+    BE[booking_extensions]
+    T[transactions]
+    PRQ[payment_reconciliation_queries]
+    B --> BE
+    U --> BE
+    B --> PRQ
+    T --> PRQ
+    U --> PRQ
+  end
+
+  subgraph RELIABILITY[Audit Integration and Notification]
+    AL[audit_logs]
+    IX[integration_exchanges]
+    OB[outbox_events]
+    ND[notification_deliveries]
+    DL[dead_letter_events]
+    U --> AL
+    WI -. business entity .-> IX
+    PRQ -. CRM sync .-> IX
+    AD --> OB
+    OB --> ND
+    ND --> DL
+  end
+
+  PR -. PROPERTY workflow .-> WI
+  PJ -. PROJECT workflow .-> WI
+  BE -. BOOKING_EXTENSION workflow .-> WI
+  PRQ -. PAYMENT_RECONCILIATION workflow .-> WI
